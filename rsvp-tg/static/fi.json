@@ -1,0 +1,28 @@
+{
+  "start": "Welcome to Pesutupa RSVP bot! Would you like to communicate in finnish or english?",
+  "language_select": "Would you like to communicate in finnish or english?",
+  "language_selected": "Selvä! Jatketaan suomeksi",
+  "language_empty": "I couldn't find that language, please choose between english and suomi",
+  "signup_question": "Et ole ilmoittautunut tulevaan tapahtumaan.\nHaluatko ilmoittautua seuraaviin Pesutuvan bileisiin?",
+  "already_signed": "Kaikki kunnossa! Olet jo ilmoittautunut seuraaviin bileisiin.",
+  "full_name": "Mikä on koko nimesi? Käytäthän ilmoittautuessasi oikeaa nimeäsi.",
+  "short_name": "Nimi on liian lyhyt",
+  "added_text": "Kiitos! Olet nyt pesutuvan nimilistalla. Pidäthän keskustelun tallessa, saat nimittäin tätä kautta tarvittavat infot bileistä. Nähdään 21. päivä!",
+  "how_can_help": "Moi! Voinko olla avuksi?",
+  "cancel_signup": "Peruuta ilmoittautuminen",
+  "nevermind": "Ei mitään sittenkään!",
+  "confirm_cancel": "Oletko varma että haluat peruuttaa ilmoittautumisen?",
+  "canceled_signup": "Olet nyt poistanut ilmoittautumisesi. Toivottavasti nähdään seuraavissa bileissä!",
+  "event_full": "Ikävä kyllä tapahtuma on täynnä. Tule katsomaan myöhemmin, jos paikkoja olisi saatavilla",
+  "close_one": "Se oli lähellä! Hyvä valinta.",
+  "alrighty": "Selvä homma!",
+  "yes": "Kyllä",
+  "no": "Ei",
+  "suomi": "Suomi",
+  "english": "English",
+  "info": "PESUTUPA 2.0\n\n22:00-23:30 Tuukkala \n23:30-01:00 VNI.RV\n01:00-02:30 Heizgerat\n02:30-04:00 Sensory Deprivation\n04:00-05:30 Runeberghain\n\nTapahtumassa noudatetaan turvallisemman tilan periaatteita, ja kaikenlainen epäkunnioittava käytös muita kohtaan on ehdottoman kiellettyä. Voit tutustua turvallisemman tilan periaatteisiin tarkemmin täällä:\n\nhttps://yhdenvertaisuus.fi/turvallisemman-tilan-ohjeistus",
+
+  "announce_added": "Uusi ilmoittautuminen",
+  "announce_added_forms": "Uusi ilmoittautuminen Formsin kautta",
+  "announce_removed": "Uusi peruminen"
+}

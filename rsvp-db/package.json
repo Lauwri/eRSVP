@@ -1,0 +1,25 @@
+{
+  "name": "rsvp-db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "permission:wait-for": "chmod +x ./scripts/wait-for.sh",
+    "migrate:make": "knex --knexfile ./knexfile.ts migrate:make -x ts",
+    "migrate:latest": "knex --knexfile ./knexfile.ts migrate:latest",
+    "migrate:rollback": "knex --knexfile ./knexfile.ts migrate:rollback",
+    "cleardb": "ts-node ./scripts/clearDb.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "knex": "^3.0.1",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}

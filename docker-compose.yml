@@ -1,0 +1,56 @@
+version: "3"
+services:
+  webserver:
+    image: nginx:mainline-alpine
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-conf:/etc/nginx/conf.d
+    depends_on:
+      - rsvp-api
+    networks:
+      - rsvp-network
+  rsvp-api:
+    build:
+      context: ./
+      dockerfile: ./rsvp-api/Dockerfile
+    container_name: rsvp-api
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - node_modules-api:/home/node/rsvp-api/node_modules
+    networks:
+      - rsvp-network
+    command: /bin/sh -c "./scripts/wait-for.sh rsvp-db:5432 -- npm run migrate; ./scripts/wait-for.sh rsvp-db:5432 -- npm run start:dev" # start for production
+  rsvp-tg:
+    build:
+      context: ./
+      dockerfile: ./rsvp-tg/Dockerfile
+    container_name: rsvp-tg
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - node_modules-tg:/home/node/rsvp-tg/node_modules
+    networks:
+      - rsvp-network
+    command: /bin/sh -c "./scripts/wait-for.sh rsvp-db:5432 -- npm run start:dev" # start for production
+  rsvp-db:
+    image: "postgres" # use latest official postgres version
+    env_file: .env
+    volumes:
+      - rsvp-db:/var/lib/postgresql/data/ # persist data even if container shuts down
+    ports:
+      - "5432:5432" # THIS IS VISIBLE TO OUTER WORLD, use 127.0.0.1:5432:5432 instead
+    networks:
+      - rsvp-network
+networks:
+  rsvp-network:
+    driver: bridge
+volumes:
+  rsvp-db:
+  node_modules-api:
+  node_modules-tg:
