@@ -1,6 +1,6 @@
-import { Router } from "express";
-import axios from "axios";
-import jwt from "jsonwebtoken";
+import { Router } from 'express';
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
 import config, {
   AnnouncementChannelId,
   AnnouncementTopicId,
@@ -8,54 +8,61 @@ import config, {
   BotHTTPToken,
   FormsToken,
   Passphrase,
-} from "../../config";
-import { addForm, formsArrived, getForms } from "rsvp-db/db/forms";
+} from '../config';
+import {
+  addForm,
+  formsArrived,
+  getForms,
+} from '@rsvp/db/dist/db/forms';
 import {
   countComing,
   getComingListSeparated,
   getUsers,
   tgArrived,
-} from "rsvp-db/db/user";
-import fi from "../../static/fi.json";
+} from '@rsvp/db/dist/db/user';
+import fi from '../../static/fi.json';
 
-import { Source } from "rsvp-db/dbTypes";
+import { Source } from '@rsvp/db/dist/dbTypes';
 
 const router = Router();
 
-router.get("/ping", (req, res, next) => {
-  return res.status(200).send("ok");
+router.get('/ping', (req, res, next) => {
+  return res.status(200).send('ok');
 });
 
-router.post("/login", (req, res, next) => {
+router.post('/login', (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  console.log("Login", username, password);
-  if (username === config.AdminName && password === config.AdminPassword) {
+  console.log('Login', username, password);
+  if (
+    username === config.AdminName &&
+    password === config.AdminPassword
+  ) {
     // Generate a JWT token
     const token = jwt.sign({ username }, config.AdminSecret);
     res.json({ token });
   } else {
-    res.status(401).json({ error: "Authentication failed" });
+    res.status(401).json({ error: 'Authentication failed' });
   }
 });
 
-router.use("/api", (req, res, next) => {
+router.use('/api', (req, res, next) => {
   const token = req.headers.authorization;
-  console.log("wath", token);
+  console.log('wath', token);
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized" });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
   jwt.verify(token, config.AdminSecret, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ error: "Unauthorized" });
+      return res.status(401).json({ error: 'Unauthorized' });
     }
     next();
   });
 });
 
-router.get("/api/getComing", async (req, res, next) => {
+router.get('/api/getComing', async (req, res, next) => {
   const coming = await getComingListSeparated();
   const flat = [
     ...coming.tg.map((tg) => ({
@@ -81,19 +88,19 @@ router.get("/api/getComing", async (req, res, next) => {
   res.json(flat);
 });
 
-router.post("/api/markArrived", async (req, res, next) => {
+router.post('/api/markArrived', async (req, res, next) => {
   const id = req.body.id;
   const arrived = req.body.arrived;
   const source = req.body.source;
 
-  console.log("Mark arrived", id, source, arrived);
+  console.log('Mark arrived', id, source, arrived);
 
   if (source === Source.TG) {
-    console.log("1");
+    console.log('1');
     await tgArrived(id, arrived);
   }
   if (source === Source.FORMS) {
-    console.log("2");
+    console.log('2');
 
     await formsArrived(id, arrived);
   }
@@ -101,12 +108,12 @@ router.post("/api/markArrived", async (req, res, next) => {
   res.json({ id, source, arrived });
 });
 
-router.get("/api/formsEmails", async (req, res) => {
+router.get('/api/formsEmails', async (req, res) => {
   const emails = await getForms();
   res.json(emails.map((e) => e.email));
 });
 
-router.post("/api/sendMessage", async (req, res, next) => {
+router.post('/api/sendMessage', async (req, res, next) => {
   const message: string[] = req.body.message;
   const passphrase = req.body.passphrase;
 
@@ -119,24 +126,26 @@ router.post("/api/sendMessage", async (req, res, next) => {
     await axios.get(
       `${BaseBotUrl}${BotHTTPToken}/sendMessage?chat_id=${
         user.chatId
-      }&parse_mode=Markdown&text=${encodeURIComponent(message.join("\n"))}`
+      }&parse_mode=Markdown&text=${encodeURIComponent(
+        message.join('\n')
+      )}`
     );
   }
 
   res.status(200).send();
 });
 
-router.post("/forms", async (req, res) => {
-  const headers = req.headers["authorization"];
-  if (typeof headers !== "undefined") {
-    const token = headers.split(" ")[1];
+router.post('/forms', async (req, res) => {
+  const headers = req.headers['authorization'];
+  if (typeof headers !== 'undefined') {
+    const token = headers.split(' ')[1];
 
     if (token !== FormsToken) {
       return res.status(403).send();
     }
   }
 
-  const email = req.body["Email Address"];
+  const email = req.body['Email Address'];
   const name = req.body.Nimi;
   await addForm({ email, name, coming: true });
   if (AnnouncementChannelId) {
@@ -145,13 +154,13 @@ router.post("/forms", async (req, res) => {
     }: ${name}\nyhteensä: ${await countComing()}`;
     const replyTo = AnnouncementTopicId
       ? `&top_msg_id=${AnnouncementTopicId}`
-      : "";
+      : '';
 
     axios.get(
       `${BaseBotUrl}${BotHTTPToken}/sendMessage?chat_id=${AnnouncementChannelId}&parse_mode=Markdown&text=${text}${replyTo}`
     );
   }
-  res.send("OK");
+  res.send('OK');
 });
 
 export default router;
