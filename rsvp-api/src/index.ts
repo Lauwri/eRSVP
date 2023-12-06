@@ -1,19 +1,22 @@
-import express from "express";
-import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
-import { format } from "date-fns";
-import cors from "cors";
+import express from 'express';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import { format } from 'date-fns';
+import cors from 'cors';
 
-import { Port } from "./config";
-import router from "./src/routes";
+import { Port } from './config';
+import router from './routes';
 
 console.log(
-  `[${format(new Date(), "yyyy-MM-dd HH:mm:ss:SS")}] RSVP API starting..`
+  `[${format(
+    new Date(),
+    'yyyy-MM-dd HH:mm:ss:SS'
+  )}] RSVP API starting..`
 );
 
 const app = express();
 const corsOptions = {
-  origin: "*",
+  origin: '*',
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
@@ -30,7 +33,7 @@ app.listen(Port, () => {
   console.log(
     `[${format(
       new Date(),
-      "yyyy-MM-dd HH:mm:ss:SS"
+      'yyyy-MM-dd HH:mm:ss:SS'
     )}] RSVP API listening on port ${Port}`
   );
 });

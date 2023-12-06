@@ -1,11 +1,11 @@
-import TelegramBot from "node-telegram-bot-api";
-import { blacklist } from "rsvp-db/db/blacklist";
+import TelegramBot from 'node-telegram-bot-api';
+import { blacklist } from '@rsvp/db/dist/db/blacklist';
 
 const ban = async (bot: TelegramBot, msg: TelegramBot.Message) => {
   if (!msg.text) {
     return;
   }
-  const params = msg.text.split(" ");
+  const params = msg.text.split(' ');
   const banId = Number(params[1]);
   const untilDays = Number(params[2]);
   const untilHours = Number(params[3]);
@@ -28,5 +28,5 @@ const ban = async (bot: TelegramBot, msg: TelegramBot.Message) => {
 
 export default {
   handler: ban,
-  command: "kuivumaan",
+  command: 'kuivumaan',
 };

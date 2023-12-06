@@ -1,6 +1,6 @@
-const path = require("path");
-const file = path.resolve(__dirname, "../.env");
-require("dotenv").config({ path: file });
+const path = require('path');
+const file = path.resolve(__dirname, '../.env');
+require('dotenv').config({ path: file });
 
 if (
   !process.env.BotTelegramId ||
@@ -14,7 +14,7 @@ if (
   !process.env.POSTGRES_DB ||
   !process.env.POSTGRES_PASSWORD
 ) {
-  throw new Error("Missing database env vars!");
+  throw new Error('Missing database env vars!');
 }
 const BotTelegramId = process.env.BotTelegramId;
 const BotTelegramName = process.env.BotTelegramName;

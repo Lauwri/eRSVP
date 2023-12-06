@@ -1,12 +1,12 @@
-import TelegramBot, { BotCommand } from "node-telegram-bot-api";
-import { getUser } from "rsvp-db/db/user";
-import { getUserId, preventGroupChats } from "../bot.util";
-import { getTranslations } from "../../util/lang";
+import TelegramBot, { BotCommand } from 'node-telegram-bot-api';
+import { getUser } from '@rsvp/db/dist/db/user';
+import { getUserId, preventGroupChats } from '../bot.util';
+import { getTranslations } from '../../util/lang';
 
 export const regex = /\/info/;
 export const command: BotCommand = {
-  command: "info",
-  description: "Event information",
+  command: 'info',
+  description: 'Event information',
 };
 
 export const handler =
@@ -20,15 +20,15 @@ export const handler =
     if (!userId) {
       return bot.sendMessage(
         msg.chat.id,
-        "I am very sorry, but something went wrong!"
+        'I am very sorry, but something went wrong!'
       );
     }
 
     const user = await getUser(userId);
     if (!user) {
-      return bot.sendMessage(msg.chat.id, "Please start first!", {
+      return bot.sendMessage(msg.chat.id, 'Please start first!', {
         reply_markup: {
-          keyboard: [[{ text: "/start" }]],
+          keyboard: [[{ text: '/start' }]],
         },
       });
     }

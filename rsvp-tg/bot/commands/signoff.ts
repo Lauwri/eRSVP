@@ -1,18 +1,18 @@
-import TelegramBot, { BotCommand } from "node-telegram-bot-api";
-import { UserState } from "rsvp-db/dbTypes";
-import { getUser, setState } from "rsvp-db/db/user";
-import { getUserId, preventGroupChats } from "../bot.util";
-import { getTranslations } from "../../util/lang";
+import TelegramBot, { BotCommand } from 'node-telegram-bot-api';
+import { UserState } from '@rsvp/db/dist/dbTypes';
+import { getUser, setState } from '@rsvp/db/dist/db/user';
+import { getUserId, preventGroupChats } from '../bot.util';
+import { getTranslations } from '../../util/lang';
 
 export const regex = /\/signoff/;
 
 export const command: BotCommand = {
-  command: "signoff",
-  description: "Signoff",
+  command: 'signoff',
+  description: 'Signoff',
 };
 export const handler =
   (bot: TelegramBot) => async (msg: TelegramBot.Message) => {
-    console.log("Received command signoff");
+    console.log('Received command signoff');
     const pass = await preventGroupChats(bot, msg);
     if (!pass) {
       return;
@@ -22,7 +22,7 @@ export const handler =
     if (!userId) {
       return bot.sendMessage(
         msg.chat.id,
-        "I am very sorry, but something went wrong!"
+        'I am very sorry, but something went wrong!'
       );
     }
 
@@ -33,7 +33,7 @@ export const handler =
         "I don't know how you did this, but please start first!",
         {
           reply_markup: {
-            keyboard: [[{ text: "/start" }]],
+            keyboard: [[{ text: '/start' }]],
           },
         }
       );

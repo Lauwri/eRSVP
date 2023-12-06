@@ -1,28 +1,34 @@
-import TelegramBot from "node-telegram-bot-api";
+import TelegramBot from 'node-telegram-bot-api';
 import {
   setLanguage,
   setState,
   countComing,
   signup,
   signoff,
-} from "rsvp-db/db/user";
-import { Language, User, UserState } from "rsvp-db/dbTypes";
-import { AnnouncementChannelId, AnnouncementTopicId } from "../../config";
-import { getTranslations } from "../../util/lang";
-import signupCommand from "../commands/signup";
-import en from "../../static/en.json";
-import fi from "../../static/fi.json";
+} from '@rsvp/db/dist/db/user';
+import { Language, User, UserState } from '@rsvp/db/dist/dbTypes';
+import {
+  AnnouncementChannelId,
+  AnnouncementTopicId,
+} from '../../config';
+import { getTranslations } from '../../util/lang';
+import signupCommand from '../commands/signup';
+import en from '../../static/en.json';
+import fi from '../../static/fi.json';
 
 enum YesNo {
-  "YES" = "YES",
-  "NO" = "NO",
+  'YES' = 'YES',
+  'NO' = 'NO',
 }
 
-const yesRegex = new RegExp(fi.yes + "|" + en.yes + "|juu|joo|kyl|khyl", "i");
-const noRegex = new RegExp(fi.no + "|" + en.no, "i");
+const yesRegex = new RegExp(
+  fi.yes + '|' + en.yes + '|juu|joo|kyl|khyl',
+  'i'
+);
+const noRegex = new RegExp(fi.no + '|' + en.no, 'i');
 const cancelSignupRegex = new RegExp(
-  fi.cancel_signup + "|" + en.cancel_signup,
-  "i"
+  fi.cancel_signup + '|' + en.cancel_signup,
+  'i'
 );
 
 export const userCommands = async (
@@ -114,7 +120,9 @@ export const userCommands = async (
       if (AnnouncementChannelId) {
         await bot.sendMessage(
           AnnouncementChannelId,
-          `${fi.announce_added}: ${text}\nyhteensä: ${await countComing()}`,
+          `${
+            fi.announce_added
+          }: ${text}\nyhteensä: ${await countComing()}`,
           {
             message_thread_id: AnnouncementTopicId,
           }
@@ -177,17 +185,17 @@ export const userCommands = async (
         return await signupCommand.handler(bot)(msg);
       }
 
-      if (text === "420") {
-        return bot.sendMessage(msg.chat.id, "Blaze it!", {
+      if (text === '420') {
+        return bot.sendMessage(msg.chat.id, 'Blaze it!', {
           reply_markup: {
             remove_keyboard: true,
           },
         });
       }
-      if (text?.toLowerCase() === "mitä pesuohjelmaa suosittelet") {
+      if (text?.toLowerCase() === 'mitä pesuohjelmaa suosittelet') {
         return bot.sendMessage(
           msg.chat.id,
-          "Parhaat kuosit saa hienopesulla ja pulverilla",
+          'Parhaat kuosit saa hienopesulla ja pulverilla',
           {
             reply_markup: {
               remove_keyboard: true,
@@ -195,8 +203,8 @@ export const userCommands = async (
           }
         );
       }
-      if (text?.toLowerCase() === "kerro vitsi") {
-        return bot.sendMessage(msg.chat.id, "En", {
+      if (text?.toLowerCase() === 'kerro vitsi') {
+        return bot.sendMessage(msg.chat.id, 'En', {
           reply_markup: {
             remove_keyboard: true,
           },
@@ -206,7 +214,10 @@ export const userCommands = async (
       await setState(userId, UserState.help);
       return bot.sendMessage(msg.chat.id, t.how_can_help, {
         reply_markup: {
-          keyboard: [[{ text: t.cancel_signup }], [{ text: t.nevermind }]],
+          keyboard: [
+            [{ text: t.cancel_signup }],
+            [{ text: t.nevermind }],
+          ],
           one_time_keyboard: true,
         },
       });

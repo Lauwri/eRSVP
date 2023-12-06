@@ -1,18 +1,18 @@
-import TelegramBot from "node-telegram-bot-api";
-import { whitelist } from "rsvp-db/db/blacklist";
+import TelegramBot from 'node-telegram-bot-api';
+import { whitelist } from '@rsvp/db/dist/db/blacklist';
 
 const unban = async (bot: TelegramBot, msg: TelegramBot.Message) => {
   if (!msg.text) {
     return;
   }
 
-  const params = msg.text.split(" ");
+  const params = msg.text.split(' ');
   let banId: number = -1;
   try {
     banId = Number(params[2]);
     if (!banId) throw new Error();
   } catch (error) {
-    bot.sendMessage(msg.chat.id, "Id on viallinen");
+    bot.sendMessage(msg.chat.id, 'Id on viallinen');
   }
 
   await whitelist(banId);
@@ -30,5 +30,5 @@ const unban = async (bot: TelegramBot, msg: TelegramBot.Message) => {
 
 export default {
   handler: unban,
-  command: "pois kuivumasta",
+  command: 'pois kuivumasta',
 };

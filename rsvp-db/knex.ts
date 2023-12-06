@@ -1,11 +1,11 @@
-import knex from "knex";
-import knexfile from "./knexfile";
+import knex from 'knex';
+import knexfile from './knexfile';
 
 const ping = () => {
   mKnex
-    .raw("SELECT 1")
+    .raw('SELECT 1')
     .then(() => {
-      console.log("Connection to Pesutupa database is working");
+      console.log('Connection to Pesutupa database is working');
     })
     .catch((err) => {
       // Failure / timeout

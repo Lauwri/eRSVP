@@ -1,7 +1,7 @@
-import config from "./config";
+import config from './config';
 
 export default {
-  client: "pg",
+  client: 'pg',
   connection: {
     host: config.DB_HOST,
     port: config.DB_PORT,
@@ -10,7 +10,7 @@ export default {
     database: config.POSTGRES_DB,
   },
   migrations: {
-    tableName: "knex_migrations",
-    directory: "migrations",
+    tableName: 'knex_migrations',
+    directory: 'migrations',
   },
 };

@@ -1,10 +1,10 @@
-import TelegramBot from "node-telegram-bot-api";
-import { AnnouncementChannelId, MaxSignups } from "../config";
-import { blacklist } from "../../rsvp-db/db/blacklist";
+import TelegramBot from 'node-telegram-bot-api';
+import { AnnouncementChannelId, MaxSignups } from '../config';
+import { blacklist } from '@rsvp/db/dist/db/blacklist';
 import {
   addMessage,
   getMessagesWithTimeLimit,
-} from "../../rsvp-db/db/messagesIn";
+} from '@rsvp/db/dist/db/messagesIn';
 
 export const getUserId = (message: TelegramBot.Message) => {
   if (message.reply_to_message) {
@@ -54,7 +54,7 @@ export const ensureNoSpam = async (
       msg.chat.id,
       `Lähetät niin paljon viestejä, että hiljennän sinut ${spanBanMin} minuutiksi`
     );
-    await blacklist({ telegramId: userId, reason: "Spam", until });
+    await blacklist({ telegramId: userId, reason: 'Spam', until });
     return true;
   }
   return false;

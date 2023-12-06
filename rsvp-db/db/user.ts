@@ -1,5 +1,5 @@
-import knex from "../knex";
-import { Custom, Forms, Language, User, UserState } from "../dbTypes";
+import knex from '../knex';
+import { Custom, Forms, Language, User, UserState } from '../dbTypes';
 
 export const createUser = async (
   telegramId: number,
@@ -20,41 +20,49 @@ export const createUser = async (
 export const getUser = async (
   telegramId: number
 ): Promise<User | undefined> => {
-  return (await knex<User>("user").select("*").where({ telegramId }))[0];
+  return (
+    await knex<User>('user').select('*').where({ telegramId })
+  )[0];
 };
 
 export const getUsers = async (): Promise<User[]> => {
-  return await knex<User>("user").select("*");
+  return await knex<User>('user').select('*');
 };
 
-export const upsertUser = async (user: Omit<User, "id">) => {
+export const upsertUser = async (user: Omit<User, 'id'>) => {
   return (
-    await knex<User>("user")
+    await knex<User>('user')
       .insert(user)
-      .onConflict("telegramId")
+      .onConflict('telegramId')
       .merge()
-      .returning("*")
+      .returning('*')
   )[0];
 };
 
 export const deleteSignup = async (telegramId: number) => {
-  return await knex<User>("user").where({ telegramId }).del();
+  return await knex<User>('user').where({ telegramId }).del();
 };
 
-export const setState = async (telegramId: number, state: UserState) => {
-  return await knex<User>("user").where({ telegramId }).update({
+export const setState = async (
+  telegramId: number,
+  state: UserState
+) => {
+  return await knex<User>('user').where({ telegramId }).update({
     state,
   });
 };
 
-export const setLanguage = async (telegramId: number, language: Language) => {
-  return await knex<User>("user").where({ telegramId }).update({
+export const setLanguage = async (
+  telegramId: number,
+  language: Language
+) => {
+  return await knex<User>('user').where({ telegramId }).update({
     language,
   });
 };
 
 export const setName = async (telegramId: number, name: string) => {
-  return await knex<User>("user").where({ telegramId }).update({
+  return await knex<User>('user').where({ telegramId }).update({
     name,
   });
 };
@@ -63,7 +71,7 @@ export const signup = async (
   telegramId: number,
   data: { avec: boolean; name: string }
 ) => {
-  return await knex<User>("user")
+  return await knex<User>('user')
     .where({ telegramId })
     .update({
       ...data,
@@ -72,13 +80,13 @@ export const signup = async (
 };
 
 export const signoff = async (telegramId: number) => {
-  return await knex<User>("user").where({ telegramId }).update({
+  return await knex<User>('user').where({ telegramId }).update({
     coming: false,
   });
 };
 
 export const tgArrived = async (id: number, arrived: boolean) => {
-  return await knex<User>("user").where({ id }).update({
+  return await knex<User>('user').where({ id }).update({
     arrived,
   });
 };
@@ -112,10 +120,14 @@ export const getComingList = async () => {
 };
 
 export const getComingListSeparated = async () => {
-  const tg = await knex<User>("user").select("*").where({ coming: true });
-  const forms = await knex<Forms>("forms").select("*").where({ coming: true });
-  const custom = await knex<Custom>("custom")
-    .select("*")
+  const tg = await knex<User>('user')
+    .select('*')
+    .where({ coming: true });
+  const forms = await knex<Forms>('forms')
+    .select('*')
+    .where({ coming: true });
+  const custom = await knex<Custom>('custom')
+    .select('*')
     .where({ coming: true });
 
   return {

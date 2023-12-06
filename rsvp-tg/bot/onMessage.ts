@@ -1,14 +1,14 @@
-import TelegramBot from "node-telegram-bot-api";
-import { format } from "date-fns";
-import { Command } from "./commands/createCommands";
-import { getUserId } from "./bot.util";
+import TelegramBot from 'node-telegram-bot-api';
+import { format } from 'date-fns';
+import { Command } from './commands/createCommands';
+import { getUserId } from './bot.util';
 import useAnnouncementCommands, {
   isAnnouncementCommand,
-} from "./announcementCommands/announcementCommands";
-import { getUser } from "rsvp-db/db/user";
-import userCommands from "./userCommands/userCommands";
-import validateMessage from "./botValidation";
-import { AnnouncementChannelId } from "../config";
+} from './announcementCommands/announcementCommands';
+import { getUser } from '@rsvp/db/dist/db/user';
+import userCommands from './userCommands/userCommands';
+import validateMessage from './botValidation';
+import { AnnouncementChannelId } from '../config';
 
 const onMessage =
   (bot: TelegramBot, commands: Command[]) =>
@@ -18,7 +18,7 @@ const onMessage =
     if (!userId) {
       return bot.sendMessage(
         msg.chat.id,
-        "I am very sorry, but something went wrong!"
+        'I am very sorry, but something went wrong!'
       );
     }
 
@@ -29,9 +29,9 @@ const onMessage =
     // Ensure user exists (it really should at this point)
     const user = await getUser(userId);
     if (!user) {
-      return bot.sendMessage(msg.chat.id, "Please start first!", {
+      return bot.sendMessage(msg.chat.id, 'Please start first!', {
         reply_markup: {
-          keyboard: [[{ text: "/start" }]],
+          keyboard: [[{ text: '/start' }]],
         },
       });
     }
@@ -42,7 +42,7 @@ const onMessage =
     console.log(
       `[${format(
         new Date(),
-        "yyyy-MM-dd HH:mm:ss:SS"
+        'yyyy-MM-dd HH:mm:ss:SS'
       )}] Received a message user=${msg.from?.username} id=${
         user.telegramId
       } chatId=${user.chatId} state=${user.state} text: `,
@@ -53,7 +53,10 @@ const onMessage =
     if (commands.some((c) => c.regex.test(text))) return;
 
     // Check if message is announcement command, fire command if it is and return
-    if (msg.chat.id === AnnouncementChannelId && isAnnouncementCommand(text)) {
+    if (
+      msg.chat.id === AnnouncementChannelId &&
+      isAnnouncementCommand(text)
+    ) {
       await useAnnouncementCommands(bot, msg);
       return;
     }

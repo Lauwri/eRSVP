@@ -1,7 +1,7 @@
-import TelegramBot from "node-telegram-bot-api";
+import TelegramBot from 'node-telegram-bot-api';
 
 const ping = async (bot: TelegramBot, msg: TelegramBot.Message) => {
-  return await bot.sendMessage(msg.chat.id, "Pyykkään", {
+  return await bot.sendMessage(msg.chat.id, 'Pyykkään', {
     reply_markup: {
       remove_keyboard: true,
     },
@@ -11,5 +11,5 @@ const ping = async (bot: TelegramBot, msg: TelegramBot.Message) => {
 
 export default {
   handler: ping,
-  command: "pyykkäätkö",
+  command: 'pyykkäätkö',
 };
