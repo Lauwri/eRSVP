@@ -1,0 +1,19 @@
+{
+    "name": "rsvp",
+    "version": "1.0.0",
+    "description": "rsvp",
+    "scripts": {
+        "build:api": "cd ./rsvp-api && npm run build",
+        "build:bot": "cd ./rsvp-tg && npm run build",
+        "migrate:latest": "cd ./rsvp-db && npm run migrate:latest"
+    },
+    "keywords": [],
+    "author": "Lauri Mattila",
+    "license": "ISC",
+    "workspaces": [
+        "./rsvp-api",
+        "./rsvp-admin",
+        "./rsvp-tg",
+        "./rsvp-db"
+    ]
+}
