@@ -1,22 +1,27 @@
-FROM node:18.18-alpine
+# Stage 1: Build Dependencies
+FROM node:18-alpine AS builder
 
-RUN mkdir -p /home/node/rsvp-tg/node_modules && chown -R node:node /home/node/rsvp-tg
+WORKDIR /app
 
-WORKDIR /home/node/rsvp-db
-COPY --chown=node:node ./rsvp-db/ .
-WORKDIR /home/node/rsvp-tg
+# Copy the whole monorepo
+COPY . .
 
-COPY --chown=node:node ./rsvp-tg/package*.json ./
-
-USER node
-
+# Install dependencies and build artifacts
 RUN npm install
+RUN npm run build:bot
 
-COPY --chown=node:node ./rsvp-tg/ .
-RUN ["chmod", "+x", "/home/node/rsvp-tg/scripts/wait-for.sh"]
+# Stage 2: Create the Final Image
+FROM node:18-alpine as production
 
-RUN npm run build
+WORKDIR /app
 
-EXPOSE 8080
+# Copy only what's needed from the previous build stage
+COPY --from=builder /app/rsvp-tg /app
+COPY --from=builder /app/rsvp-db /app/rsvp-db
+COPY --from=builder /app/node_modules /app/node_modules
+COPY --from=builder /app/rsvp-tg/package*.json /app/
+# Expose the port
+EXPOSE 8000
 
+# Command to run the application
 CMD [ "node", "./dist/index.js" ]
