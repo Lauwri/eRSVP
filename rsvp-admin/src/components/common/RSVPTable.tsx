@@ -1,18 +1,18 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Box, styled as mstyled, TableBody, TextField } from "@mui/material";
-import Table from "@mui/material/Table";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import styled from "styled-components";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Box, styled as mstyled, TableBody, TextField } from '@mui/material';
+import Table from '@mui/material/Table';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import styled from 'styled-components';
 import {
   fetchUsers,
   selectAllUsers,
   markUserArrived,
   User,
   Source,
-} from "../../store/features/userSlice";
-import { useAppDispatch, useAppSelector } from "../../store/root";
+} from '../../store/features/userSlice';
+import { useAppDispatch, useAppSelector } from '../../store/root';
 
 const StyledTableCell = mstyled(TableCell)({
   padding: 5,
@@ -24,7 +24,7 @@ export const RSVPTable = () => {
   const users = useAppSelector(selectAllUsers);
   const userStatus = useAppSelector((state) => state.tg.status);
   const [filteredUsers, setFilteredUsers] = useState(users);
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState('');
 
   const onFilterChange = useCallback(
     (value: string) => {
@@ -36,7 +36,7 @@ export const RSVPTable = () => {
   );
 
   useEffect(() => {
-    if (userStatus === "idle") {
+    if (userStatus === 'idle') {
       dispatch(fetchUsers());
     }
   }, [userStatus, dispatch]);
@@ -46,7 +46,6 @@ export const RSVPTable = () => {
   }, [users, filter, setFilteredUsers, onFilterChange]);
 
   const onMarkUserArrived = (id: number, arrived: boolean, source: Source) => {
-    console.log("onMarkUserArrived", id, arrived, source);
     dispatch(markUserArrived({ id, arrived, source }));
   };
 
@@ -55,10 +54,9 @@ export const RSVPTable = () => {
     .sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0));
 
   const sisal = users.filter((u) => u.arrived);
-  console.log("hmm", sisal);
   return (
     <Box>
-      <Box display={"flex"} width="100%" gap={"25px"} alignItems={"center"}>
+      <Box display={'flex'} width="100%" gap={'25px'} alignItems={'center'}>
         <TextField
           id="filter"
           label="Haku"
@@ -90,7 +88,7 @@ export const RSVPTable = () => {
             <StyledTableCell>
               <b>Lähde</b>
             </StyledTableCell>
-            <StyledTableCell style={{ textAlign: "center" }}>
+            <StyledTableCell style={{ textAlign: 'center' }}>
               <b>Saapunut</b>
             </StyledTableCell>
           </TableRow>
@@ -117,10 +115,10 @@ const RSVPUserRow = (
     <StyledTableCell>
       <UserListName>{user.source}</UserListName>
     </StyledTableCell>
-    <StyledTableCell style={{ textAlign: "center" }}>
+    <StyledTableCell style={{ textAlign: 'center' }}>
       <UserListArrivedCheckbox
         type="checkbox"
-        id={"UserListArrivedRadio" + index}
+        id={'UserListArrivedRadio' + index}
         name="arrived"
         checked={user.arrived || false}
         onChange={(evt) => onChange(user.id, evt.target.checked, user.source)}

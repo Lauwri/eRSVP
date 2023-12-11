@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { styled } from "styled-components";
-import { login, selectLogin } from "../../store/features/loginSlice";
-import { useAppDispatch, useAppSelector } from "../../store/root";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { styled } from 'styled-components';
+import { login, selectLogin } from '../../store/features/loginSlice';
+import { useAppDispatch, useAppSelector } from '../../store/root';
 
 export const Login = () => {
   const dispatch = useAppDispatch();
   const loginStatus = useAppSelector(selectLogin);
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Should skip login?", loginStatus);
     if (loginStatus) {
-      navigate("/rsvp");
+      navigate('/rsvp');
     }
   }, [navigate, loginStatus]);
 
@@ -29,17 +28,17 @@ export const Login = () => {
       <LoginForm>
         <Input
           id={username}
-          type={"text"}
+          type={'text'}
           onChange={(v) => setUsername(v.target.value)}
           value={username}
-          placeholder={"Username"}
+          placeholder={'Username'}
         ></Input>
         <Input
           id={password}
-          type={"password"}
+          type={'password'}
           onChange={(v) => setPassword(v.target.value)}
           value={password}
-          placeholder={"Password"}
+          placeholder={'Password'}
         ></Input>
         <Button
           onClick={() => {

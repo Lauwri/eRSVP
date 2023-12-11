@@ -1,5 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { whitelist } from '@rsvp/db/dist/db/blacklist';
+import { whitelist } from 'rsvp-db';
 
 const unban = async (bot: TelegramBot, msg: TelegramBot.Message) => {
   if (!msg.text) {

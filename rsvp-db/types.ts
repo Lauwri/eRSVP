@@ -1,20 +1,20 @@
 export enum Language {
-  "FIN" = "FIN",
-  "ENG" = "ENG",
+  'FIN' = 'FIN',
+  'ENG' = 'ENG',
 }
 
-export enum UserState {
-  "none" = "none",
-  "select_language" = "select_language",
-  "signup_question" = "signup_question",
-  "set_name" = "set_name",
-  "help" = "help",
-  "confirm_cancel_signup" = "confirm_cancel_signup",
+export enum TelegramState {
+  'none' = 'none',
+  'select_language' = 'select_language',
+  'signup_question' = 'signup_question',
+  'set_name' = 'set_name',
+  'help' = 'help',
+  'confirm_cancel_signup' = 'confirm_cancel_signup',
 }
 
 export enum DateType {
-  "close_rsvp" = "close_rsvp",
-  "open_rsvp" = "open_rsvp",
+  'close_rsvp' = 'close_rsvp',
+  'open_rsvp' = 'open_rsvp',
 }
 
 export interface Dates {
@@ -22,7 +22,7 @@ export interface Dates {
   date: Date;
 }
 
-export interface User {
+export interface Telegram {
   id: number;
   telegramId: number;
   chatId: number;
@@ -31,7 +31,7 @@ export interface User {
   coming: boolean;
   avec?: boolean;
   arrived?: boolean;
-  state: UserState;
+  state: TelegramState;
 }
 
 export interface Blacklist {
@@ -62,7 +62,7 @@ export interface MessagesIn {
 }
 
 export enum Source {
-  "FORMS" = "FORMS",
-  "TG" = "TG",
-  "CUSTOM" = "CUSTOM",
+  'FORMS' = 'FORMS',
+  'TG' = 'TG',
+  'CUSTOM' = 'CUSTOM',
 }

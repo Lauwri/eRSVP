@@ -1,10 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { inBlacklist } from '@rsvp/db/dist/db/blacklist';
-import {
-  ensureNoSpam,
-  getUserId,
-  preventGroupChats,
-} from './bot.util';
+import { inBlacklist } from 'rsvp-db';
+import { ensureNoSpam, getUserId, preventGroupChats } from './bot.util';
 
 const validateMessage = async (
   bot: TelegramBot,

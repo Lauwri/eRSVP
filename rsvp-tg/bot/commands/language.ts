@@ -1,6 +1,5 @@
 import TelegramBot, { BotCommand } from 'node-telegram-bot-api';
-import { UserState } from '@rsvp/db/dist/dbTypes';
-import { getUser, setState } from '@rsvp/db/dist/db/user';
+import { TelegramState, getTelegram, setState } from 'rsvp-db';
 import { getUserId, preventGroupChats } from '../bot.util';
 import { getTranslations } from '../../util/lang';
 
@@ -12,12 +11,10 @@ export const command: BotCommand = {
 };
 export const handler =
   (bot: TelegramBot) => async (msg: TelegramBot.Message) => {
-    const pass = await preventGroupChats(bot, msg);
+    const pass = await preventGroupChats(bot, msg, true);
     if (!pass) {
       return;
     }
-
-    console.log('Received command language');
 
     const userId = getUserId(msg);
     if (!userId) {
@@ -27,7 +24,7 @@ export const handler =
       );
     }
 
-    const user = await getUser(userId);
+    const user = await getTelegram(userId);
     if (!user) {
       return bot.sendMessage(
         msg.chat.id,
@@ -41,7 +38,7 @@ export const handler =
     }
     const t = getTranslations(user.language);
 
-    await setState(userId, UserState.select_language);
+    await setState(userId, TelegramState.select_language);
     return await bot.sendMessage(msg.chat.id, t.language_select, {
       reply_markup: {
         keyboard: [[{ text: t.suomi }], [{ text: t.english }]],

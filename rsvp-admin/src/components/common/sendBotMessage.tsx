@@ -1,27 +1,26 @@
-import React, { useState } from "react";
-import { TextField } from "@mui/material";
-import styled from "styled-components";
-import { postMessage } from "../../api/rsvpApi";
-import { useAppSelector } from "../../store/root";
-import { selectLogin } from "../../store/features/loginSlice";
+import React, { useState } from 'react';
+import { TextField } from '@mui/material';
+import styled from 'styled-components';
+import { postMessage } from '../../api/rsvpApi';
+import { useAppSelector } from '../../store/root';
+import { selectLogin } from '../../store/features/loginSlice';
 enum SentState {
-  "none" = "none",
-  "ok" = "ok",
-  "fail" = "fail",
-  "loading" = "loading",
+  'none' = 'none',
+  'ok' = 'ok',
+  'fail' = 'fail',
+  'loading' = 'loading',
 }
 export const SendBotMessage = () => {
   const token = useAppSelector(selectLogin);
 
-  const [message, setMessage] = useState("");
-  const [passphrase, setPassphrase] = useState("");
+  const [message, setMessage] = useState('');
+  const [passphrase, setPassphrase] = useState('');
 
   const [sentState, setSentState] = useState<SentState>(SentState.none);
 
   const sendBotMessage = async () => {
     if (token) {
       setSentState(SentState.loading);
-      console.log("Message", message);
       const result = await postMessage(message, passphrase, token);
       if (result) return setSentState(SentState.ok);
       setSentState(SentState.fail);
@@ -47,14 +46,13 @@ export const SendBotMessage = () => {
           variant="outlined"
           margin="normal"
           value={message}
-          style={{ width: "100%" }}
+          style={{ width: '100%' }}
           multiline
           rows={8}
           onChange={(evt) => setMessage(evt.target.value)}
         />
         <Button
           onClick={() => {
-            console.log("sending message");
             if (message.length > 10) sendBotMessage();
           }}
         >

@@ -33,3 +33,5 @@ docker exec -i containerId psql -U db_username -d db_name < backup
 - rsvp-admin build and serve
 - scripts and static could be shared volume? Its a hack now to copy em
 - tests ???
+
+npm install --install-links ../foo

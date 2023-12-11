@@ -1,5 +1,5 @@
 import TelegramBot, { BotCommand } from 'node-telegram-bot-api';
-import { getUser } from '@rsvp/db/dist/db/user';
+import { getTelegram } from 'rsvp-db';
 import { getUserId, preventGroupChats } from '../bot.util';
 import { getTranslations } from '../../util/lang';
 
@@ -24,7 +24,7 @@ export const handler =
       );
     }
 
-    const user = await getUser(userId);
+    const user = await getTelegram(userId);
     if (!user) {
       return bot.sendMessage(msg.chat.id, 'Please start first!', {
         reply_markup: {

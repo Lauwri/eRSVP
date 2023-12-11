@@ -13,16 +13,13 @@ import {
   addForm,
   formsArrived,
   getForms,
-} from '@rsvp/db/dist/db/forms';
-import {
   countComing,
   getComingListSeparated,
-  getUsers,
+  getTelegrams,
   tgArrived,
-} from '@rsvp/db/dist/db/user';
+  Source,
+} from 'rsvp-db';
 import fi from '../../static/fi.json';
-
-import { Source } from '@rsvp/db/dist/dbTypes';
 
 const router = Router();
 
@@ -34,11 +31,7 @@ router.post('/login', (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  console.log('Login', username, password);
-  if (
-    username === config.AdminName &&
-    password === config.AdminPassword
-  ) {
+  if (username === config.AdminName && password === config.AdminPassword) {
     // Generate a JWT token
     const token = jwt.sign({ username }, config.AdminSecret);
     res.json({ token });
@@ -49,7 +42,6 @@ router.post('/login', (req, res, next) => {
 
 router.use('/api', (req, res, next) => {
   const token = req.headers.authorization;
-  console.log('wath', token);
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
@@ -93,15 +85,10 @@ router.post('/api/markArrived', async (req, res, next) => {
   const arrived = req.body.arrived;
   const source = req.body.source;
 
-  console.log('Mark arrived', id, source, arrived);
-
   if (source === Source.TG) {
-    console.log('1');
     await tgArrived(id, arrived);
   }
   if (source === Source.FORMS) {
-    console.log('2');
-
     await formsArrived(id, arrived);
   }
 
@@ -121,14 +108,12 @@ router.post('/api/sendMessage', async (req, res, next) => {
     return res.status(401).send();
   }
 
-  const tgUsers = await getUsers();
+  const tgUsers = await getTelegrams();
   for (const user of tgUsers) {
     await axios.get(
       `${BaseBotUrl}${BotHTTPToken}/sendMessage?chat_id=${
         user.chatId
-      }&parse_mode=Markdown&text=${encodeURIComponent(
-        message.join('\n')
-      )}`
+      }&parse_mode=Markdown&text=${encodeURIComponent(message.join('\n'))}`
     );
   }
 

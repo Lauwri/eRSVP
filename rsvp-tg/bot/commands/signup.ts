@@ -1,10 +1,5 @@
 import TelegramBot, { BotCommand } from 'node-telegram-bot-api';
-import { UserState } from '@rsvp/db/dist/dbTypes';
-import {
-  countComing,
-  getUser,
-  setState,
-} from '@rsvp/db/dist/db/user';
+import { countComing, getTelegram, setState, TelegramState } from 'rsvp-db';
 import { getUserId, maxCount, preventGroupChats } from '../bot.util';
 import { getTranslations } from '../../util/lang';
 
@@ -16,8 +11,7 @@ export const command: BotCommand = {
 };
 export const handler =
   (bot: TelegramBot) => async (msg: TelegramBot.Message) => {
-    console.log('Received command signup');
-    const pass = await preventGroupChats(bot, msg);
+    const pass = await preventGroupChats(bot, msg, true);
     if (!pass) {
       return;
     }
@@ -30,7 +24,7 @@ export const handler =
       );
     }
 
-    const user = await getUser(userId);
+    const user = await getTelegram(userId);
     if (!user) {
       return bot.sendMessage(
         msg.chat.id,
@@ -47,7 +41,7 @@ export const handler =
     const maxed = maxCount(await countComing());
 
     if (maxed) {
-      await setState(userId, UserState.none);
+      await setState(userId, TelegramState.none);
       return await bot.sendMessage(msg.chat.id, t.event_full, {
         reply_markup: {
           remove_keyboard: true,
@@ -56,7 +50,7 @@ export const handler =
     }
 
     if (!user.coming) {
-      await setState(userId, UserState.signup_question);
+      await setState(userId, TelegramState.signup_question);
       return await bot.sendMessage(msg.chat.id, t.signup_question, {
         reply_markup: {
           keyboard: [[{ text: t.yes }], [{ text: t.no }]],
@@ -64,7 +58,7 @@ export const handler =
       });
     }
 
-    await setState(userId, UserState.none);
+    await setState(userId, TelegramState.none);
     await bot.sendMessage(msg.chat.id, t.already_signed);
   };
 

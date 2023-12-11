@@ -1,14 +1,11 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { deleteCustomByName } from '@rsvp/db/dist/db/custom';
+import { deleteCustomByName } from 'rsvp-db';
 
-const addCustomPerson = async (
-  bot: TelegramBot,
-  msg: TelegramBot.Message
-) => {
+const addCustomPerson = async (bot: TelegramBot, msg: TelegramBot.Message) => {
   if (!msg.text) return;
 
   const params = msg.text.split(' ');
-  const name = params[1];
+  const name = params.slice(2).join(' ');
 
   if (!name || name.length < 3) {
     return await bot.sendMessage(

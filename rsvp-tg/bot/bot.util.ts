@@ -1,10 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { AnnouncementChannelId, MaxSignups } from '../config';
-import { blacklist } from '@rsvp/db/dist/db/blacklist';
-import {
-  addMessage,
-  getMessagesWithTimeLimit,
-} from '@rsvp/db/dist/db/messagesIn';
+import { blacklist, addMessage, getMessagesWithTimeLimit } from 'rsvp-db';
 
 export const getUserId = (message: TelegramBot.Message) => {
   if (message.reply_to_message) {
@@ -17,16 +13,15 @@ export const maxCount = (count: number) => count >= MaxSignups;
 
 export const preventGroupChats = async (
   bot: TelegramBot,
-  msg: TelegramBot.Message
+  msg: TelegramBot.Message,
+  preventAnnouncement = false
 ) => {
   try {
-    const chatMemberCount = await bot.getChatMemberCount(msg.chat.id);
-    if (chatMemberCount > 2) {
-      if (msg.chat.id !== AnnouncementChannelId) {
-        bot.leaveChat(msg.chat.id);
-      }
+    const chatType = msg.chat.type;
+    if (chatType !== 'private') {
+      if (msg.chat.id !== AnnouncementChannelId) bot.leaveChat(msg.chat.id);
+      if (msg.chat.id === AnnouncementChannelId) return !preventAnnouncement;
       return false;
-      //   return bot.sendMessage(msg.chat.id, "Kiitos ryhmään pääsystä!");
     }
     return true;
   } catch (error) {

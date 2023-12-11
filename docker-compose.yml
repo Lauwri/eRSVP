@@ -1,19 +1,27 @@
 version: '3.8'
 
 services:
-  rsvp-api:
+  rsvp-db:
+    image: 'postgres' # use latest official postgres version
+    env_file: .env
+    volumes:
+      - rsvp-db:/var/lib/postgresql/data/ # persist data even if container shuts down
+    networks:
+      - rsvp-network
+    ports:
+      - 5432:5432
+
+  # Builds db and runs database migrations, then exits
+  rsvp-db-migration:
     build:
       context: ./
-      dockerfile: ./rsvp-api/Dockerfile
-    container_name: rsvp-api
-    restart: unless-stopped
-    env_file:
-      - .env
+      dockerfile: ./rsvp-db/Dockerfile
+    command: npm run migrate:latest # should it be /bin/sh -c "./wait-for.sh rsvp-db:5432 -- npm run migrate:latest
+    env_file: .env
     networks:
       - rsvp-network
     depends_on:
       - rsvp-db
-      - rsvp-tg
 
   rsvp-tg:
     build:
@@ -24,25 +32,36 @@ services:
     env_file: .env
     networks:
       - rsvp-network
+    entrypoint: /app/wait-and-run.sh rsvp-db-migration
+    command: node ./rsvp-tg/dist/index.js
+    depends_on:
+      - rsvp-db
 
-  rsvp-db:
-    image: 'postgres' # use latest official postgres version
-    env_file: .env
-    volumes:
-      - rsvp-db:/var/lib/postgresql/data/ # persist data even if container shuts down
+  rsvp-api:
+    build:
+      context: ./
+      dockerfile: ./rsvp-api/Dockerfile
+    container_name: rsvp-api
+    restart: unless-stopped
+    env_file:
+      - .env
     networks:
       - rsvp-network
+    entrypoint: /app/wait-and-run.sh rsvp-db-migration
+    command: node ./rsvp-api/dist/src/index.js
+    depends_on:
+      - rsvp-db
 
-  nginx:
+  # Builds react front and launches nginx
+  webservice:
     build:
-      context: ./nginx
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./nginx/Dockerfile
     ports:
       - '80:80'
     networks:
       - rsvp-network
-    depends_on:
-      - rsvp-api
+
 volumes:
   rsvp-db:
 networks:

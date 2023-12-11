@@ -1,6 +1,5 @@
 import TelegramBot, { BotCommand } from 'node-telegram-bot-api';
-import { UserState } from '@rsvp/db/dist/dbTypes';
-import { getUser, setState } from '@rsvp/db/dist/db/user';
+import { TelegramState, getTelegram, setState } from 'rsvp-db';
 import { getUserId, preventGroupChats } from '../bot.util';
 import { getTranslations } from '../../util/lang';
 
@@ -12,8 +11,7 @@ export const command: BotCommand = {
 };
 export const handler =
   (bot: TelegramBot) => async (msg: TelegramBot.Message) => {
-    console.log('Received command signoff');
-    const pass = await preventGroupChats(bot, msg);
+    const pass = await preventGroupChats(bot, msg, true);
     if (!pass) {
       return;
     }
@@ -26,7 +24,7 @@ export const handler =
       );
     }
 
-    const user = await getUser(userId);
+    const user = await getTelegram(userId);
     if (!user) {
       return bot.sendMessage(
         msg.chat.id,
@@ -40,7 +38,7 @@ export const handler =
     }
     const t = getTranslations(user.language);
 
-    await setState(userId, UserState.confirm_cancel_signup);
+    await setState(userId, TelegramState.confirm_cancel_signup);
     return await bot.sendMessage(msg.chat.id, t.confirm_cancel, {
       reply_markup: {
         keyboard: [[{ text: t.yes }], [{ text: t.no }]],

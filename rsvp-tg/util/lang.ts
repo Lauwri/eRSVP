@@ -1,4 +1,4 @@
-import { Language } from '@rsvp/db/dist/dbTypes';
+import { Language } from 'rsvp-db';
 import en from '../static/en.json';
 import fi from '../static/fi.json';
 

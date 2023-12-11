@@ -1,8 +1,8 @@
 {
-  "name": "@rsvp/tg-bot",
+  "name": "rsvp-tg",
   "version": "1.0.0",
   "description": "telegram rsvp bot",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "start": "node ./dist/index.js",
     "start:dev": "nodemon ./index.ts",
@@ -12,13 +12,13 @@
   "author": "Lauri Mattila",
   "license": "ISC",
   "dependencies": {
-    "@rsvp/db": "file:../rsvp-db",
     "@types/node-telegram-bot-api": "^0.61.8",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "knex": "^3.0.1",
     "node-telegram-bot-api": "^0.63.0",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "rsvp-db": "file:../rsvp-db"
   },
   "devDependencies": {
     "nodemon": "^3.0.1",
