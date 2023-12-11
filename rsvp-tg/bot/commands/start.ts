@@ -6,7 +6,7 @@ import { getTranslations } from '../../util/lang';
 export const regex = /\/start/;
 export const command: BotCommand = {
   command: 'start',
-  description: 'Start  using the bot',
+  description: 'Start using the bot',
 };
 
 export const handler =
@@ -17,7 +17,6 @@ export const handler =
     }
 
     const userId = getUserId(msg);
-    console.log('Start using the bot', userId);
 
     if (!userId) {
       return bot.sendMessage(

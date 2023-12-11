@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "rsvp",
   "scripts": {
+    "start:dev:api": "cd ./rsvp-api && npm run start:dev",
+    "start:dev:bot": "cd ./rsvp-tg && npm run start:dev",
     "build:api": "cd ./rsvp-api && npm run build",
     "build:bot": "cd ./rsvp-tg && npm run build",
     "build:db": "cd ./rsvp-db && npm run build",
