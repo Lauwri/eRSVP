@@ -16,7 +16,7 @@ services:
     build:
       context: ./
       dockerfile: ./rsvp-db/Dockerfile
-    command: npm run migrate:latest # should it be /bin/sh -c "./wait-for.sh rsvp-db:5432 -- npm run migrate:latest
+    command: /bin/sh -c "/app/wait-for.sh rsvp-db:5432 -- npm run migrate:latest"
     env_file: .env
     networks:
       - rsvp-network
